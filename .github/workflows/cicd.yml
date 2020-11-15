@@ -49,8 +49,8 @@ jobs:
         uses: actions/upload-artifact@v2
         if: runner.os == 'Linux' && matrix.python == 3.9
         with:
-            name: swarmlib@${{ GITHUB_SHA }}
-            path: dist
+          name: swarmlib@${{ GITHUB_SHA }}
+          path: dist
 
   publish:
     name: Publish Github Action
