@@ -16,12 +16,12 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - macos-latest
-          - windows-latest
+          # - macos-latest
+          # - windows-latest
         python:
-          - 3.6
-          - 3.7
-          - 3.8
+          # - 3.6
+          # - 3.7
+          # - 3.8
           - 3.9
     steps:
       - name: Checkout Source
@@ -49,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: runner.os == 'Linux' && matrix.python == 3.9
         with:
-          name: swarmlib@$GITHUB_SHA
+          name: swarmlib@${{ github.sha }}
           path: dist
 
   publish:
@@ -64,7 +64,7 @@ jobs:
         uses: actions/download-artifact@v2
         id: download
         with:
-          name: swarmlib@$GITHUB_SHA
+          name: swarmlib@${{ github.sha }}
       - name: Echo download path
         run: |
           echo ${{steps.download.outputs.download-path}}
