@@ -65,11 +65,15 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: Download Artifacts
         uses: actions/download-artifact@v2
+        id: download
         with:
           name: swarmlib@${{ github.sha }}
           path: dist
       - name: Install and verify local swarmlib wheel
-        run: make install-bundle
+        run: |
+          echo ${{steps.download.outputs.download-path}}
+          make install-bundle
+        working-directory: ${{steps.download.outputs.download-path}}/..
 
   publish:
     name: Publish Github Action
