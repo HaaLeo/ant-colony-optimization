@@ -52,14 +52,14 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
-          # - windows-latest
+          - windows-latest
         python:
           - 3.6
           - 3.7
           - 3.8
           - 3.9
     steps:
-      - name: Checkout Source
+      - name: Checkout Source # To get Makefile
         uses: actions/checkout@v2
       - name: Setup python ${{ matrix.python }} on ${{ matrix.os }}
         uses: actions/setup-python@v2
@@ -72,19 +72,16 @@ jobs:
           name: swarmlib@${{ github.sha }}
           path: dist
       - name: Install and verify local swarmlib wheel
-        run: |
-          echo ${{steps.download.outputs.download-path}}
-          echo $PWD
-          make install-bundle
+        run: make install-bundle
 
   publish:
-    name: Publish Github Action
+    name: Publish Pypi Package
     needs:
       - lint-test-bundle
       - verify-bundle
-    # if: github.event_name == 'release'
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v2
@@ -92,12 +89,8 @@ jobs:
         with:
           name: swarmlib@${{ github.sha }}
           path: dist
-      - name: Echo download path
-        run: |
-          echo ${{steps.download.outputs.download-path}}
-          ls -R ${{steps.download.outputs.download-path}}
-      # - name: Publish package
-      #   uses: pypa/gh-action-pypi-publish@v1.4.1
-      #   with:
-      #     password: ${{ secrets.PYPI_TOKEN }}
-      #     packages_dir: ${{steps.download.outputs.download-path}}
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@v1.4.1
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}
+          packages_dir: ${{ steps.download.outputs.download-path }}
