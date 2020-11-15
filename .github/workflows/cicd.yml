@@ -49,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: runner.os == 'Linux' && matrix.python == 3.9
         with:
-          name: swarmlib@${{ env.GITHUB_SHA }}
+          name: swarmlib@$GITHUB_SHA
           path: dist
 
   publish:
@@ -61,10 +61,10 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Download Artifacts
-        uses: actions/download/artifact@v2
+        uses: actions/download-artifact@v2
         id: download
         with:
-          name: swarmlib@${{ env.GITHUB_SHA }}
+          name: swarmlib@$GITHUB_SHA
       - name: Echo download path
         run: |
           echo ${{steps.download.outputs.download-path}}
