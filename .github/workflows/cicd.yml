@@ -45,26 +45,31 @@ jobs:
           file: ./coverage.xml
           flags: unittests
           name: Coverage for ${{ matrix.os }} with python ${{ matrix.python }}
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        if: runner.os == 'Linux' && matrix.python == 3.9
+        with:
+            name: swarmlib@${{ GITHUB_SHA }}
+            path: dist
 
   publish:
     name: Publish Github Action
     needs:
       - lint-test-bundle
-    if: github.event_name == 'release'
+    # if: github.event_name == 'release'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout Source
-        uses: actions/checkout@v2
-      - name: Setup python
-        uses: actions/setup-python@v2
+      - name: Download Artifacts
+        uses: actions/download/artifact@v2
+        id: download
         with:
-          python-version: 3.9
-      - name: Prepare for publish
+          name: swarmlib@${{ GITHUB_SHA }}
+      - name: Echo download path
         run: |
-          make install
-          make bundle
-      - name: Publish package
-        uses: pypa/gh-action-pypi-publish@v1.4.1
-        with:
-          password: ${{ secrets.PYPI_TOKEN }}
+          echo ${{steps.download.outputs.download-path}}
+          ls -R ${{steps.download.outputs.download-path}}
+      # - name: Publish package
+      #   uses: pypa/gh-action-pypi-publish@v1.4.1
+      #   with:
+      #     password: ${{ secrets.PYPI_TOKEN }}
