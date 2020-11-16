@@ -62,7 +62,7 @@ def run_swarm():
         '--log-level',
         default='info',
         choices=['debug', 'info', 'warning', 'error', 'critical'],
-        help='Set the log level')
+        help='Set the log level (default info)')
 
     sub_parsers = parser.add_subparsers(
         title='Commands',
