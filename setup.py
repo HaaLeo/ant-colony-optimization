@@ -15,7 +15,7 @@ with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'), 'r', enc
 with open(path.join(path.abspath(path.dirname(__file__)), 'swarmlib/_version.py'), 'r', encoding='utf8') as f:
     exec(f.read())
 
-with open(path.join(path.abspath(path.dirname(__file__)), 'requirements.txt'), 'r', encoding='uft8') as rr:
+with open(path.join(path.abspath(path.dirname(__file__)), 'requirements.txt'), 'r', encoding='utf8') as rr:
     required_libs = [line.rstrip() for line in rr]
 
 setup(
